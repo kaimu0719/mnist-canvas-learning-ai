@@ -1,6 +1,6 @@
 import numpy as np
 
-class Affile:
+class Affine:
   def __init__(self, W, b):
     self.W = W
     self.b = b
