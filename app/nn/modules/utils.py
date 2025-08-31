@@ -34,3 +34,27 @@ def col2im(col, input_shape, filter_h, filter_w, stride=1, pad=1):
       img[:, :, y:y_max:stride, x:x_max:stride] += col[:, :, y, x, :, :]
   
   return img[:, :, pad:H + pad, pad:W + pad]
+
+def softmax(x: np.ndarray):
+  if x.ndim == 2:
+    c = np.max(x, axis=1, keepdims=True)
+    exp_x = np.exp(x - c)
+    sum_exp_x = np.sum(exp_x, axis=1, keepdims=True)
+    return exp_x / sum_exp_x
+  else:
+    c = np.max(x)
+    exp_x = np.exp(x - c)
+    return exp_x / np.sum(exp_x)
+
+def cross_entropy_error(y, t):
+  if y.ndim == 1:
+    t = t.reshape(-1, t.size)
+    y = y.reshape(-1, y.size)
+  
+  if t.size == y.size:
+    t = t.argmax(axis=1)
+  
+  batch_size = y.shape[0]
+  delta = delta = 1e-7
+
+  return -np.sum(np.log(y[np.arange(batch_size), t] + delta)) / batch_size
