@@ -34,3 +34,14 @@ def col2im(col, input_shape, filter_h, filter_w, stride=1, pad=1):
       img[:, :, y:y_max:stride, x:x_max:stride] += col[:, :, y, x, :, :]
   
   return img[:, :, pad:H + pad, pad:W + pad]
+
+def softmax(x: np.ndarray):
+  if x.ndim == 2:
+    c = np.max(x, axis=1, keepdims=True)
+    exp_x = np.exp(x - c)
+    sum_exp_x = np.sum(exp_x, axis=1, keepdims=True)
+    return exp_x / sum_exp_x
+  else:
+    c = np.max(x)
+    exp_x = np.exp(x - c)
+    return exp_x / np.sum(exp_x)
